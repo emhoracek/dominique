@@ -28,7 +28,7 @@ end
 function _update()
  t += 1
  if dia_mode == 1
- then dia_handler()
+ then update_dia()
  else dir4_handler()
  end
 end
@@ -104,19 +104,6 @@ end
 --          dialog          --
 ------------------------------
 
--- handle input 
-function dia_handler()
-
- if (btnp(0)) tgl_btn()
- if (btnp(1)) tgl_btn()
- if (btnp(2)) tgl_btn()
- if (btnp(3)) tgl_btn()
- 
- if (btnp(5)) next_dia()
- 
- update_dia()
-end
-
 function tgl_btn()
   if dia_btn == 2
   then dia_btn = 1
@@ -126,10 +113,18 @@ end
 
 function next_dia()
   n=1
+  dia_btn=1
+  reset_dia()
   if curr_dia < #dialog
   then curr_dia += 1
   else curr_dia = 1
   end
+end
+
+function reset_dia()
+  d = dialog[curr_dia]
+  d.c1 = ""
+  d.c2 = ""
 end
 
 function update_dia()
@@ -137,12 +132,23 @@ function update_dia()
   
   n += 1
   local n2 = 0
+  local ready = n > #d.w1 + #d.w2 + 20
   
   if (n > #d.w1) n2 = n - #d.w1 
 
   d.c1 = sub(d.w1,1,n)
   d.c2 = sub(d.w2,1,n2)
   dialog[curr_dia] = d
+  
+  if ready 
+  then
+   if (btnp(0)) tgl_btn()
+   if (btnp(1)) tgl_btn()
+   if (btnp(2)) tgl_btn()
+   if (btnp(3)) tgl_btn()
+ 
+   if (btnp(5)) next_dia()
+  end
 end
 
 function draw_dia()
@@ -188,7 +194,7 @@ end
 
 dialog = 
  { md("are you ready to compete",
-      "for queen of the galaxy?",
+      "to become my successor?",
       "yes!", "i dunno..."),
    md("what will be your ",
       "strategy?",
