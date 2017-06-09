@@ -158,15 +158,13 @@ function update_dia()
   
   n += 1
   local n2 = 0
-  local ready = n > #d.w1 + #d.w2 + 20
-  
   if (n > #d.w1) n2 = n - #d.w1 
 
   d.c1 = sub(d.w1,1,n)
   d.c2 = sub(d.w2,1,n2)
   dialog[curr_dia] = d
   
-  if ready 
+  if ready(d,15)
   then
    if (btnp(0)) tgl_btn()
    if (btnp(1)) tgl_btn()
@@ -188,18 +186,23 @@ function draw_dia()
   
   print(o.c1,24,96,12)
   print(o.c2,24,104,12)
+  print(o.c3,24,112,12)
   
-  local ready = n > #o.w1 + #o.w2 + 10
-  if (o.b1 != "" and o.b2 != "" and ready)
-  then draw_btns(o.b1, o.b2)
+  if (#o.btns > 0 and ready(d,15))
+  then draw_btns(o.btns[1], o.btns[2])
+  else print(o.c3,24,112,120)
   end
 end
 
-function draw_btns(w1,w2)
+function ready(d,pause)
+  return n > #o.w1 + #o.w2 + pause
+end
+
+function draw_btns(b1,b2)
   rectfill(22,114,60,122,8)
   rectfill(70,114,110,122,8)
-  print(w1,24,116,7)
-  print(w2,72,116,7)
+  print(b1,24,116,7)
+  print(b2,72,116,7)
   bx = 70
   if (dia_btn == 1) bx = 22
   rect(bx,114,bx+40,122,7)
@@ -207,24 +210,25 @@ function draw_btns(w1,w2)
 end
 
 -- dialog constructor
-function md(w1,w2,b1,b2)
+function md(w1,w2,btns)
   tmp_dia = {}
   tmp_dia.w1 = w1
   tmp_dia.w2 = w2
+  tmp_dia.w3 = ""
   tmp_dia.c1 = ""
   tmp_dia.c2 = ""
-  tmp_dia.b1 = b1
-  tmp_dia.b2 = b2
+  tmp_dia.c3 = ""
+  tmp_dia.btns = btns
   return tmp_dia
 end
 
 dialog = 
  { md("are you ready to compete",
       "to become my successor?",
-      "yes!", "i dunno..."),
+      {"yes!", "i dunno..."}),
    md("what will be your ",
       "strategy?",
-      "crafty", "fight!") }
+      {"crafty", "fight!"}) }
 
 -------------------------------
 --        movement           --
@@ -379,7 +383,6 @@ bbbbbbbb88888888ccccccccaaaaaaaa5555555577777777eeeeeeee00000000bbbbbbbb00000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-
 __gff__
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
